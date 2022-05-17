@@ -3,8 +3,8 @@ import { ParsedUrlQuery } from "querystring";
 
 import { IS_PRODUCTION } from "lib/constants";
 
-import { getRetirements } from "@klimadao/lib/utils";
-import { RetirementsResult } from "@klimadao/lib/types/offset";
+import { getRetirementTotalsAndBalances } from "@klimadao/lib/utils";
+import { RetirementsTotalsAndBalances } from "@klimadao/lib/types/offset";
 
 import { RetirementPage } from "components/pages/Retirements";
 import { loadTranslation } from "lib/i18n";
@@ -15,7 +15,7 @@ interface Params extends ParsedUrlQuery {
 
 interface PageProps {
   beneficiaryAddress: Params["beneficiary_address"];
-  retirements: RetirementsResult;
+  retirements: RetirementsTotalsAndBalances;
 }
 
 export const getStaticProps: GetStaticProps<PageProps, Params> = async (
@@ -33,7 +33,9 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
     }
 
     const promises = [
-      getRetirements(params.beneficiary_address as string),
+      getRetirementTotalsAndBalances({
+        address: params.beneficiary_address as string,
+      }),
       loadTranslation(locale),
     ];
 
